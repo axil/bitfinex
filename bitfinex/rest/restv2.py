@@ -2448,11 +2448,29 @@ class Client:
         response = self._post(path, raw_body, verify=True)
         return response
 
-    def submit_funding_offer(self):
-        raise NotImplementedError
+    def submit_funding_offer(self, symbol, amount, rate, period, order_type='LIMIT', **kwargs):
+        body = {
+            "type": order_type,
+            "symbol": symbol,
+            "amount": str(amount),
+            "rate": str(rate),
+            "period": period,
+            "flags": 0,
+            **kwargs
+        }
 
-    def cancel_funding_offer(self):
-        raise NotImplementedError
+        path = "v2/auth/w/funding/offer/submit"
+        response = self._post(path, json.dumps(body), verify=True)
+        return response
+
+    def cancel_funding_offer(self, id):
+        body = {
+            "id": id
+        }
+
+        path = "v2/auth/w/funding/offer/cancel"
+        response = self._post(path, json.dumps(body), verify=True)
+        return response
 
     def cancel_all_funding_offers(self):
         raise NotImplementedError
